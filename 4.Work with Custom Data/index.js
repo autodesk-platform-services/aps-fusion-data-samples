@@ -17,17 +17,17 @@ const properties = [
 const operation = 'create' // 'create' or 'update' or 'delete' 
 
 // Create an instance of auth.js.
-let myForgeAuth = new MyAuth(clientId, clientSecret);
+let myApsAuth = new MyAuth(clientId, clientSecret);
 
 // Get an access token from your auth.js instance. 
-let accessToken = await myForgeAuth.getAccessToken(); 
+let accessToken = await myApsAuth.getAccessToken(); 
 
 // Create an instance of app.js using the variable set above. 
-let myForgeApp = new MyApp(
+let myApsApp = new MyApp(
   accessToken
 );
 
-await myForgeApp.manageProperties(
+await myApsApp.manageProperties(
   hubName,
   projectName,
   componentName,

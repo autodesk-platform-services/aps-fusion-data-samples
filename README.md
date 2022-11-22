@@ -4,9 +4,8 @@
 [![License](http://img.shields.io/:license-mit-blue.svg)](http://opensource.org/licenses/MIT)
 
 
-**Forge API:** [![oAuth2](https://img.shields.io/badge/oAuth2-v2-green.svg)](http://developer-autodesk.github.io/)
-[![Fusion Data API](https://img.shields.io/badge/Fusion%20Data-v1-orange)](https://forge.autodesk.com/en/docs/forgeag/v1/developers_guide/overview/)
-[![Forge Data Events](https://img.shields.io/badge/Forge%20Data%20Events-v1-informational)](https://forge.autodesk.com/en/docs/fevnt/v1/developers_guide/overview/)
+**APS API:** [![oAuth2](https://img.shields.io/badge/oAuth2-v2-green.svg)](https://aps.autodesk.com/en/docs/oauth/v1/developers_guide/overview/)
+[![Fusion Data API](https://img.shields.io/badge/Fusion%20Data-v1-orange)](https://aps.autodesk.com/en/docs/fusiondata/v1/developers_guide/overview/)
 
 ---
 
@@ -29,7 +28,7 @@ This repository contains several samples illustrating use of Fusion Data API in 
 ---
 
 ## Prerequisites
-1. **Forge Account**: Learn how to create a Forge Account, activate subscription and create an app at [this tutorial](http://learnforge.autodesk.io/#/account/);
+1. **APS Account**: Learn how to create a APS Account, activate subscription and create an app at [this tutorial](https://tutorials.autodesk.io/);
 2. [Node.Js](https://nodejs.org) with version > v16.13.2 and basic knowledge of JavaScript;
 
 
@@ -39,7 +38,7 @@ Though the samples start with the `hubs(){}` query, there are many other options
 
 ![Query](./readme/queries.png)
 
-As you can see, you could e.g. start directly with a given file version if you already know the parameters it requires: `hubId`, `projectId` and `versionId`. Perhaps you already have the necessary values from a previous **GraphQL** request or via the [Data Management API](https://forge.autodesk.com/en/docs/data/v2/developers_guide/overview/) 
+As you can see, you could e.g. start directly with a given file version if you already know the parameters it requires: `hubId`, `projectId` and `versionId`. Perhaps you already have the necessary values from a previous **GraphQL** request or via the [Data Management API](https://aps.autodesk.com/en/docs/data/v2/developers_guide/overview/) 
 
 ![Query](./readme/fileversions.png)
 
@@ -106,6 +105,6 @@ These samples are licensed under the terms of the [MIT License](http://opensourc
 
 # Written by
 
-Adam Nagy [adam.nagy@autodesk.com](adam.nagy@autodesk.com), [Forge Partner Development](http://forge.autodesk.com)
+Adam Nagy [adam.nagy@autodesk.com](adam.nagy@autodesk.com), [Autodesk Partner Development](http://aps.autodesk.com)
 
-Denis Grigor [denis.grigor@autodesk.com](denis.grigor@autodesk.com), [Forge Partner Development](http://forge.autodesk.com)
+Denis Grigor [denis.grigor@autodesk.com](denis.grigor@autodesk.com), [Autodesk Partner Development](http://aps.autodesk.com)

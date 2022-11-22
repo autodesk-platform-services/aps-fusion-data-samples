@@ -6,13 +6,13 @@ In the **terminal** run this to install all the necessary components
 npm i
 ``` 
 
-You will need to set the value of `clientId` and `clientSecret` variables in `index.js` based on your **Forge app**'s credentials and make sure that the `Callback URL` of the app is set to `http://localhost:3000/callback/oauth` as shown in the picture\
-![Get 3-legged token](./readme/ForgeCredentials.png)
+You will need to set the value of `clientId` and `clientSecret` variables in `index.js` based on your **APS app**'s credentials and make sure that the `Callback URL` of the app is set to `http://localhost:3000/callback/oauth` as shown in the picture\
+![Get 3-legged token](./readme/credentials.png)
 
 You will also need to set the value of `hubName`, `projectName` and `componentName` variables. You can find them either in **Fusion Teams** web app, in **Fusion 360** or any other place that lets you navigate the contents of your **Autodesk** hubs and projects - including the **Fusion Data API** itself\
 ![Get version id](./readme/inputs.png)
 
-Then start **ngrok** that will provide a publicly available URL that the **Forge** webhook can send messages to, which then will be passed to your computer\
+Then start **ngrok** that will provide a publicly available URL that the **APS** webhook can send messages to, which then will be passed to your computer\
 ![ngrok](./readme/ngrok.gif)
 
 As shown in the gif, you need to copy the relevant URL and set the value of `ngrokUrl` in `index.js` to that 
@@ -45,7 +45,7 @@ Received a notification with following content:
     "milestonename": "Milestone V48",
     "eventtype": "MILESTONE_CREATED"
   },
-  "dataschema": "https://forge.autodesk.com/schemas/pim-event-schema-v1.0.0.json",
+  "dataschema": "https://aps.autodesk.com/schemas/pim-event-schema-v1.0.0.json",
   "traceparent": "00-5d062bba301551d19e86db826d135397-e440e5a6d791d97c-01"
 }
 ```
@@ -81,5 +81,5 @@ mutation CreateWebhook($componentId: ID!, $eventType: WebhookEventTypeEnum!, $ca
 
 -----------
 
-Please refer to this page for more details: [Fusion Data API Docs](https://forge.autodesk.com/en/docs/fusiondata/v1/developers_guide/overview/)
+Please refer to this page for more details: [Fusion Data API Docs](https://aps.autodesk.com/en/docs/fusiondata/v1/developers_guide/overview/)
 

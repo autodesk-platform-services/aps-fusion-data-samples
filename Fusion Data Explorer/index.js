@@ -7,15 +7,15 @@ import cookieSession from 'cookie-session';
 let app = express();
 
 app.use(cookieSession({
-  name: 'forge_session',
-  keys: ['forge_secure_key'],
+  name: 'aps_session',
+  keys: ['aps_secure_key'],
   maxAge: 60 * 60 * 1000 // 1 hour like the token
 }));
 
-let clientId = process.env.FORGE_CLIENT_ID || "YOUR CLIENT ID";
-let clientSecret = process.env.FORGE_CLIENT_SECRET || "YOUR CLIENT SECRET";
+let clientId = process.env.APS_CLIENT_ID || "YOUR CLIENT ID";
+let clientSecret = process.env.APS_CLIENT_SECRET || "YOUR CLIENT SECRET";
 let serverPort = process.env.PORT || 3000;
-let callbackUrl = process.env.FORGE_CALLBACK_URL || `http://localhost:${serverPort}/callback/oauth`;
+let callbackUrl = process.env.APS_CALLBACK_URL || `http://localhost:${serverPort}/callback/oauth`;
 
 app.get('/callback/oauth', async (req, res) => {
   const { code } = req.query;

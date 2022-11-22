@@ -16,21 +16,21 @@ const eventType = 'MILESTONE_CREATED';
 const ngrokUrl = '<YOUR_NGROK_URL>';
 
 // Create an instance of auth.js.
-let myForgeAuth = new MyAuth(clientId, clientSecret);
+let myApsAuth = new MyAuth(clientId, clientSecret);
 
 // Get an access token from your auth.js instance. 
-let accessToken = await myForgeAuth.getAccessToken();
+let accessToken = await myApsAuth.getAccessToken();
 
-var myForgeApp = new MyApp(
+var myApsApp = new MyApp(
   accessToken,
   ngrokUrl
 );
 
-await myForgeApp.unsubscribeToEvent(eventType);
+await myApsApp.unsubscribeToEvent(eventType);
 
-if (await myForgeApp.subscribeToEvent(hubName, projectName, componentName, eventType)) {
+if (await myApsApp.subscribeToEvent(hubName, projectName, componentName, eventType)) {
   // Use the startMonitoringEvents method to report events to the console.
-  await myForgeApp.startMonitoringEvents();
+  await myApsApp.startMonitoringEvents();
 
   console.log("\nCreate a milestone in Fusion 360 and wait for the event to be listed here:")
 }

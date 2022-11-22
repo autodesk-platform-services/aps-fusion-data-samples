@@ -10,17 +10,17 @@ const projectName = '<YOUR_PROJECT_NAME>';
 const componentName = '<YOUR_COMPONENT_NAME>';
 
 // Create an instance of auth.js.
-let myForgeAuth = new MyAuth(clientId, clientSecret);
+let myApsAuth = new MyAuth(clientId, clientSecret);
 
 // Get an access token from your auth.js instance. 
-let accessToken = await myForgeAuth.getAccessToken(); 
+let accessToken = await myApsAuth.getAccessToken(); 
 
 // Create an instance of app.js using the variable set above. 
-let myForgeApp = new MyApp(
+let myApsApp = new MyApp(
   accessToken
 );
 
-const thumbnailPath = await myForgeApp.downloadThumbnail(
+const thumbnailPath = await myApsApp.downloadThumbnail(
   hubName,
   projectName,
   componentName

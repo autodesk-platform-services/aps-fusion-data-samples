@@ -6,8 +6,8 @@ In the **terminal** run this to install all the necessary components
 npm i
 ``` 
 
-You will need to set the value of `clientId` and `clientSecret` variables in `index.js` based on your **Forge app**'s credentials and make sure that the `Callback URL` of the app is set to `http://localhost:3000/callback/oauth` as shown in the picture\
-![Get 3-legged token](./readme/ForgeCredentials.png)
+You will need to set the value of `clientId` and `clientSecret` variables in `index.js` based on your **APS app**'s credentials and make sure that the `Callback URL` of the app is set to `http://localhost:3000/callback/oauth` as shown in the picture\
+![Get 3-legged token](./readme/credentials.png)
 
 You will also need to set the value of `hubName`, `projectName`, `componentName` variables to identify the design you want to work with, the `propertyGroupName`, `properties` and `operation` variables to specify what you want to do with your custom properties. 
 You can find the exact values to use for `hubName`, `projectName`, `componentName` variables by finding your design either in **Fusion Teams** web app, in **Fusion 360** or any other place that lets you navigate the contents of your **Autodesk** hubs and projects - including the **Fusion Data API** itself\
@@ -125,4 +125,4 @@ mutation DeleteProperty($propertyGroupId: ID!) {
 
 -----------
 
-Please refer to this page for more details: [Fusion Data API Docs](https://forge.autodesk.com/en/docs/fusiondata/v1/developers_guide/overview/)
+Please refer to this page for more details: [Fusion Data API Docs](https://aps.autodesk.com/en/docs/fusiondata/v1/developers_guide/overview/)
