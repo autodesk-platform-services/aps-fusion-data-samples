@@ -36,7 +36,7 @@ This repository contains several samples illustrating use of Fusion Data API in 
 
 Though the samples start with the `hubs(){}` query, there are many other options for you. The easiest is to check the **QUERIES** section on the **DOCS** tab in the [Fusion Data Explorer sample](./Fusion%20Data%20Explorer/) to see what other starting points are available.
 
-![Query](./readme/queries.png)
+![thumbnail](./readme/queries.png)
 
 As you can see, you could e.g. start directly with a given file version if you already know the parameters it requires: `hubId`, `projectId` and `versionId`. Perhaps you already have the necessary values from a previous **GraphQL** request or via the [Data Management API](https://aps.autodesk.com/en/docs/data/v2/developers_guide/overview/) 
 
