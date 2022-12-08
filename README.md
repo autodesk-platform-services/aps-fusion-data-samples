@@ -34,7 +34,7 @@ This repository contains several samples illustrating use of Fusion Data API in 
 
 ## Notes
 
-Though the samples start with the `hubs(){}` query, there are many other options for you. The easiest is to check the **QUERIES** section on the **DOCS** tab in the [Fusion Data Explorer sample](./Fusion%20Data%20Explorer/) to see what other starting points are available.
+Though the samples start with the `hubs(){}` query, there are many other options for you. The easiest is to check the **QUERIES** section on the **DOCS** tab in the [Data Explorer sample](https://github.com/autodesk-platform-services/aps-data-explorer) to see what other starting points are available.
 
 ![thumbnail](./readme/queries.png)
 
