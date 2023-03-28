@@ -15,8 +15,6 @@ export default class App {
     };
   }
 
-
-
   async sendQuery(query, variables) {
     let response = await axios({
       method: 'POST',
@@ -158,4 +156,101 @@ export default class App {
       }
     }
   }
+
+  // <getModelHierarchyBeta>
+  async getModelHierarchyBeta(hubName, projectName, componentName) {
+    try {
+      // Get first batch of occurrences
+      let response = await this.sendQuery(
+        `query GetComponentVersion($hubName: String!, $projectName: String!, $componentName: String!) {
+          hubs(filter:{name:$hubName}) {
+            results {
+              name
+              projects(filter:{name:$projectName}) {
+                results {
+                  name
+                  rootFolder {
+                    items(filter:{name:$componentName}) {
+                      results {
+                        ... on Component {
+                          name
+                          tipVersion {
+                            id
+                            name 
+                            allModelOccurrences {
+                              results {
+                                parentComponentVersion {
+                                  id 
+                                }
+                                componentVersion {
+                                  id
+                                  name
+                                }
+                              }
+                              pagination {
+                                cursor
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }`,
+        {
+          hubName,
+          projectName,
+          componentName
+        }
+      )
+
+      let rootComponentVersion = response.data.data.hubs.results[0].projects.results[0].rootFolder.items.results[0].tipVersion;
+      let cursor = rootComponentVersion.allModelOccurrences.pagination.cursor;
+
+      // Keep getting the rest of the occurrences if needed
+      while (cursor) {
+        response = await this.sendQuery(
+          `query GetModelHierarchy($componentVersionId: String!, $cursor: String!) {
+            componentVersion(componentVersionId: $componentVersionId) {
+              allModelOccurrences (pagination: {cursor: $cursor}) {
+                results {
+                  parentComponentVersion {
+                    id 
+                  }
+                  componentVersion {
+                    id
+                    name
+                  }
+                }
+                pagination {
+                  cursor
+                }
+              }
+            }
+          }`,
+          {
+            componentVersionId: rootComponentVersion.id,
+            cursor
+          }
+        )
+
+        rootComponentVersion.allModelOccurrences.results = 
+          rootComponentVersion.allModelOccurrences.results.concat(
+            response.data.data.componentVersion.allModelOccurrences.results);
+        cursor = response.data.data.componentVersion.allModelOccurrences.pagination.cursor;
+      }
+
+      return rootComponentVersion;
+    } catch (err) {
+      console.log("There was an issue: " + err.message)
+    }
+  }
+// </getModelHierarchyBeta>  
 }
+
+
+
