@@ -58,7 +58,7 @@ The workflow can be achieved following these steps:
 
 In `app.js` file, the following GraphQL query traverses the hub, project and its rootfolder to find the design to work with
 ```
-query GetThumbnail($hubName: String!, $projectName: String!, $componentName: String!) {
+query GetComponentVersion($hubName: String!, $projectName: String!, $componentName: String!) {
   hubs(filter:{name:$hubName}) {
     results {
       projects(filter:{name:$projectName}) {
