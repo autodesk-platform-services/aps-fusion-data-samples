@@ -11,7 +11,7 @@ const componentName = '<YOUR_COMPONENT_NAME>';
 const eventType = 'MILESTONE_CREATED';
 
 // In a terminal, start ngrok with the following command: 
-// ngrok http 3000 -host-header="localhost:3000" 
+// ngrok http 8080 --host-header="localhost:8080" 
 // Copy and paste ngrok URL value returned to your terminal console. 
 const ngrokUrl = '<YOUR_NGROK_URL>';
 

@@ -6,12 +6,12 @@ In the **terminal** run this to install all the necessary components
 npm i
 ``` 
 
-You will need to set the value of `clientId` and `clientSecret` variables in `index.js` based on your **APS app**'s credentials and make sure that the `Callback URL` of the app is set to `http://localhost:3000/callback/oauth` as shown in the picture\
-![Get 3-legged token](./readme/credentials.png)
+You will need to set the value of `clientId` and `clientSecret` variables in `index.js` based on your **APS app**'s credentials and make sure that the `Callback URL` of the app is set to `http://localhost:8080/callback/oauth` as shown in the picture\
+![Get 3-legged token](../readme/credentials.png)
 
 You will also need to set the value of `hubName`, `projectName`, `componentName` variables to identify the design you want to work with, the `propertyGroupName`, `properties` and `operation` variables to specify what you want to do with your custom properties. 
 You can find the exact values to use for `hubName`, `projectName`, `componentName` variables by finding your design either in **Fusion Teams** web app, in **Fusion 360** or any other place that lets you navigate the contents of your **Autodesk** hubs and projects - including the **Fusion Data API** itself\
-![Get version id](./readme/inputs.png)
+![Get version id](../readme/inputs.png)
 
 
 ## Running the test
@@ -19,12 +19,12 @@ In a **terminal**, you can run the test with:
 ```
 npm start
 ```
-As instructed in the console, you'll need to open a web browser and navigate to http://localhost:3000 in order to log into your Autodesk account 
+As instructed in the console, you'll need to open a web browser and navigate to http://localhost:8080 in order to log into your Autodesk account 
 
 ## Output
 Depending on what properties you have already added to the model and which operation you are using (create vs uppdate vs delete) the output will be different. Let's say we have properties added to the model alraed and we want to delete them, then we would have something like this in the terminal
 ```
-Open http://localhost:3000 in a web browser in order to log in with your Autodesk account!
+Open http://localhost:8080 in a web browser in order to log in with your Autodesk account!
 Current properties for componentVersion with id Y29tcH5jby5Gc3E1VDNfcFRreVV5aWI0R180THp3fjh0RTJtS3lJRjFBcnlhTHYwc1IzWVdfYWdhfkQycXRkUlNTUnVLUEE5ZWxEZXM1Y2U in the com.test property group
 {
   "id": "ZXh0fmNvLkZzcTVUM19wVGt5VXlpYjRHXzRMend+aTU3RXNuWTYxaXI3WWdWelRnU2pETl9hZ2E=",

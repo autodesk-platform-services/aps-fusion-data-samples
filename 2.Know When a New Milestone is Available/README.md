@@ -6,14 +6,14 @@ In the **terminal** run this to install all the necessary components
 npm i
 ``` 
 
-You will need to set the value of `clientId` and `clientSecret` variables in `index.js` based on your **APS app**'s credentials and make sure that the `Callback URL` of the app is set to `http://localhost:3000/callback/oauth` as shown in the picture\
-![Get 3-legged token](./readme/credentials.png)
+You will need to set the value of `clientId` and `clientSecret` variables in `index.js` based on your **APS app**'s credentials and make sure that the `Callback URL` of the app is set to `http://localhost:8080/callback/oauth` as shown in the picture\
+![Get 3-legged token](../readme/credentials.png)
 
 You will also need to set the value of `hubName`, `projectName` and `componentName` variables. You can find them either in **Fusion Teams** web app, in **Fusion 360** or any other place that lets you navigate the contents of your **Autodesk** hubs and projects - including the **Fusion Data API** itself\
-![Get version id](./readme/inputs.png)
+![Get version id](../readme/inputs.png)
 
 Then start **ngrok** that will provide a publicly available URL that the **APS** webhook can send messages to, which then will be passed to your computer\
-![ngrok](./readme/ngrok.gif)
+![ngrok](./readme/ngrok.png)
 
 As shown in the gif, you need to copy the relevant URL and set the value of `ngrokUrl` in `index.js` to that 
 
@@ -22,14 +22,14 @@ In a **terminal**, you can run the test with:
 ```
 npm start
 ```
-As instructed in the console, you'll need to open a web browser and navigate to http://localhost:3000 in order to log into your Autodesk account 
+As instructed in the console, you'll need to open a web browser and navigate to http://localhost:8080 in order to log into your Autodesk account 
 
 ## Output
 ```
-Open http://localhost:3000 in a web browser in order to log in with your Autodesk account!
+Open http://localhost:8080 in a web browser in order to log in with your Autodesk account!
 Deleted webhook 75a2adac-622e-41a0-b560-8fdb4a5228bd
 Created webhook c3bebb52-4224-45ff-ad5b-fd7353f824a6
-Listening to the events on http://localhost:3000 => https://fc4d-86-2-185-49.ngrok.io/callback
+Listening to the events on http://localhost:8080 => https://fc4d-86-2-185-49.ngrok.io/callback
 
 Create a milestone in Fusion 360 and wait for the event to be listed here:
 Received a notification with following content:

@@ -15,7 +15,7 @@ export default class App {
   constructor(accessToken, ngrokUrl) {
     this.graphAPI = 'https://developer.api.autodesk.com/fusiondata/2022-04/graphql';
     this.accessToken = accessToken;
-    this.port = 3000;
+    this.port = 8080;
     this.callbackPath = '/callback';
     this.callbackUrl = ngrokUrl + this.callbackPath;
   }

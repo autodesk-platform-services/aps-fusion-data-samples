@@ -14,7 +14,7 @@ export default class Auth {
   constructor(clientId, clientSecret) {
     this.host = 'https://developer.api.autodesk.com/';
     this.authAPI = `${this.host}authentication/v1/`;
-    this.port = 3000;
+    this.port = 8080;
     this.redirectUri = `http://localhost:${this.port}/callback/oauth`;
 
     this.accessTokenPromise = new Promise((resolve, reject) => {

@@ -6,11 +6,11 @@ In the **terminal** run this to install all the necessary components
 npm i
 ``` 
 
-You will need to set the value of `clientId` and `clientSecret` variables in `index.js` based on your **APS app**'s credentials and make sure that the `Callback URL` of the app is set to `http://localhost:3000/callback/oauth` as shown in the picture\
-![Get 3-legged token](./readme/credentials.png)
+You will need to set the value of `clientId` and `clientSecret` variables in `index.js` based on your **APS app**'s credentials and make sure that the `Callback URL` of the app is set to `http://localhost:8080/callback/oauth` as shown in the picture\
+![Get 3-legged token](../readme/credentials.png)
 
 You will also need to set the value of `hubName`, `projectName` and `componentName` variables. You can find them either in **Fusion Teams** web app, in **Fusion 360** or any other place that lets you navigate the contents of your **Autodesk** hubs and projects - including the **Fusion Data API** itself\
-![Get version id](./readme/inputs.png)
+![Get version id](../readme/inputs.png)
 
 
 ## Running the test
@@ -18,11 +18,11 @@ In a **terminal**, you can run the test with:
 ```
 npm start
 ```
-As instructed in the console, you'll need to open a web browser and navigate to http://localhost:3000 in order to log into your Autodesk account 
+As instructed in the console, you'll need to open a web browser and navigate to http://localhost:8080 in order to log into your Autodesk account 
 
 ## Output
 ```
-Open http://localhost:3000 in a web browser in order to log in with your Autodesk account!
+Open http://localhost:8080 in a web browser in order to log in with your Autodesk account!
 Open thumbnail from location: file:///Users/nagyad/Documents/GitHub/autodesk-platform-services/aps-fusion-data-samples/3.Find%20the%20Thumbnail%20of%20a%20specific%20Part/thumbnail.png
 ```
 Once the thumbnail has been downloaded, a link will be provided to it in the console that you can click - e.g.:\
