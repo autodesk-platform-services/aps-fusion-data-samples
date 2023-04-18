@@ -23,7 +23,7 @@ As instructed in the console, you'll need to open a web browser and navigate to 
 ## Output
 ```
 Open http://localhost:8080 in a web browser in order to log in with your Autodesk account!
-Open STEP file from location: file:///Users/nagyad/Documents/GitHub/autodesk-platform-services/aps-fusion-data-samples/3.Generate%20STEP%20file%20for%20Component/geometry.step
+Open STEP file from location: file:///Users/nagyad/Documents/GitHub/autodesk-platform-services/aps-fusion-data-samples/5.Generate%20STEP%20file%20for%20Component/geometry.step
 ```
 Once the STEP file has been downloaded, a link will be provided to it in the console that you can click
 
