@@ -8,7 +8,7 @@ import path from "path";
 // Application constructor 
 export default class App {
   constructor(accessToken) {
-    this.graphAPI = 'https://developer.api.autodesk.com/fusiondata/2022-04/graphql';
+    this.graphAPI = 'https://developer.api.autodesk.com/graphql';
     this.accessToken = accessToken;
   }
 
@@ -39,7 +39,7 @@ export default class App {
   }
 
   getComponentVersionThumbnail(response, hubName, projectName, componentName) {
-    let hubs = response.data.data.hubs.results;
+    let hubs = response.data.data.nav.hubs.results;
     if (hubs.length < 1)
       throw { message: `Hub "${hubName}" does not exist` }
       
@@ -47,11 +47,11 @@ export default class App {
     if (projects.length < 1)
       throw { message: `Project "${projectName}" does not exist` }
 
-    let files = projects[0].rootFolder.items.results;
+    let files = projects[0].folders.results[0].items.results;
     if (files.length < 1)
       throw { message: `Component "${componentName}" does not exist` }
 
-    return files[0].tipVersion.thumbnail;
+    return files[0].tipRootComponent.thumbnail;
   }
 
 // <downloadThumbnail>
@@ -60,19 +60,23 @@ export default class App {
       while (true) {
         let response = await this.sendQuery(
           `query GetThumbnail($hubName: String!, $projectName: String!, $componentName: String!) {
-            hubs(filter:{name:$hubName}) {
-              results {
-                projects(filter:{name:$projectName}) {
-                  results {
-                    rootFolder {
-                      items(filter:{name:$componentName}) {
+            nav {
+              hubs(filter:{name:$hubName}) {
+                results {
+                  projects(filter:{name:$projectName}) {
+                    results {
+                      folders {
                         results {
-                          ... on Component {
-                            tipVersion {
-                              thumbnail {
-                                status
-                                mediumImageUrl
-                              }          
+                          items(filter:{name:$componentName}) {
+                            results {
+                              ... on MFGDesignItem {
+                                tipRootComponent {
+                                  thumbnail {
+                                    status
+                                    mediumImageUrl
+                                  }          
+                                }
+                              }
                             }
                           }
                         }
