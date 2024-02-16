@@ -8,7 +8,7 @@ import path from "path";
 // Application constructor 
 export default class App {
   constructor(accessToken) {
-    this.graphAPI = 'https://developer.api.autodesk.com/graphql';
+    this.graphAPI = 'https://developer.api.autodesk.com/beta/graphql';
     this.accessToken = accessToken;
   }
 
@@ -47,11 +47,11 @@ export default class App {
     if (projects.length < 1)
       throw { message: `Project "${projectName}" does not exist` }
 
-    let files = projects[0].folders.results[0].items.results;
+    let files = projects[0].items.results;
     if (files.length < 1)
       throw { message: `Component "${componentName}" does not exist` }
 
-    return files[0].tipRootComponent.thumbnail;
+    return files[0].tipRootComponentVersion.thumbnail;
   }
 
 // <downloadThumbnail>
@@ -65,18 +65,14 @@ export default class App {
                 results {
                   projects(filter:{name:$projectName}) {
                     results {
-                      folders {
+                      items(filter:{name:$componentName}) {
                         results {
-                          items(filter:{name:$componentName}) {
-                            results {
-                              ... on MFGDesignItem {
-                                tipRootComponent {
-                                  thumbnail {
-                                    status
-                                    mediumImageUrl
-                                  }          
-                                }
-                              }
+                          ... on MFGDesignItem {
+                            tipRootComponentVersion {
+                              thumbnail {
+                                status
+                                url
+                              }          
                             }
                           }
                         }
@@ -102,7 +98,7 @@ export default class App {
           // If the thumbnail generation finished then we can download it
           // from the url
           let thumbnailPath = path.resolve('thumbnail.png');
-          await this.downloadImage(thumbnail.mediumImageUrl, thumbnailPath);
+          await this.downloadImage(thumbnail.url, thumbnailPath);
           return "file://" + encodeURI(thumbnailPath);
         } else {
           console.log("Extracting thumbnail … (it may take a few seconds)")
