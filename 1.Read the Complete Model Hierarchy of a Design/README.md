@@ -44,30 +44,36 @@ The workflow can be achieved following these steps:
 
 ## Fusion Data API Query
 
-In `app.js` file, the following GraphQL query traverses the hub, project and its rootfolder to find the design to extract the assembly hierachy from
+In `app.js` file, the following GraphQL query traverses the hub, project and its items to find the design to extract the assembly hierachy from
 
 ```
 query GetModelHierarchy($hubName: String!, $projectName: String!, $componentName: String!) {
-  hubs(filter:{name:$hubName}) {
-    results {
-      name
-      projects(filter:{name:$projectName}) {
-        results {
-          name
-          rootFolder {
+  nav {
+    hubs(filter:{name:$hubName}) {
+      results {
+        name
+        projects(filter:{name:$projectName}) {
+          results {
+            name
             items(filter:{name:$componentName}) {
               results {
-                ... on Component {
+                ... on MFGDesignItem {
                   name
-                  tipVersion {
+                  tipRootComponentVersion {
                     id
                     name 
-                    modelOccurrences {
+                    allModelOccurrences {
                       results {
+                        parentComponentVersion {
+                          id 
+                        }
                         componentVersion {
                           id
                           name
                         }
+                      }
+                      pagination {
+                        cursor
                       }
                     }
                   }
