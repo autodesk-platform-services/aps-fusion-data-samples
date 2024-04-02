@@ -10,7 +10,7 @@ You will need to set the value of `clientId` and `clientSecret` variables in `in
 ![Get 3-legged token](../readme/credentials.png)
 
 You will also need to set the value of `hubName`, `projectName`, `componentName` variables to identify the design you want to work with, the `propertyGroupName`, `properties` and `operation` variables to specify what you want to do with your custom properties. 
-You can find the exact values to use for `hubName`, `projectName`, `componentName` variables by finding your design either in **Fusion Teams** web app, in **Fusion 360** or any other place that lets you navigate the contents of your **Autodesk** hubs and projects - including the **Fusion Data API** itself\
+You can find the exact values to use for `hubName`, `projectName`, `componentName` variables by finding your design either in **Fusion Teams** web app, in **Fusion 360** or any other place that lets you navigate the contents of your **Autodesk** hubs and projects - including the **Manufacturing Data Model API** itself\
 ![Get version id](../readme/inputs.png)
 
 
@@ -54,7 +54,7 @@ The workflow can be achieved following these steps:
 4. Update exising properties 
 5. Delete properties if not needed anymore
 
-## Fusion Data API Query
+## Manufacturing Data Model API Query
 
 In `app.js` file, the following GraphQL query traverses the hub, project and its rootfolder to find the design to work with
 ```
@@ -125,4 +125,4 @@ mutation DeleteProperty($propertyGroupId: ID!) {
 
 -----------
 
-Please refer to this page for more details: [Fusion Data API Docs](https://aps.autodesk.com/en/docs/fusiondata/v1/developers_guide/overview/)
+Please refer to this page for more details: [Manufacturing Data Model API Docs](https://aps.autodesk.com/en/docs/mfgdataapi/v1/developers_guide/overview/)

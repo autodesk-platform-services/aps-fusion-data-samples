@@ -9,7 +9,7 @@ npm i
 You will need to set the value of `clientId` and `clientSecret` variables in `index.js` based on your **APS app**'s credentials and make sure that the `Callback URL` of the app is set to `http://localhost:8080/callback/oauth` as shown in the picture\
 ![Get 3-legged token](../readme/credentials.png)
 
-You will also need to set the value of `hubName`, `projectName` and `componentName` variables. You can find them either in **Fusion Teams** web app, in **Fusion 360** or any other place that lets you navigate the contents of your **Autodesk** hubs and projects - including the **Fusion Data API** itself\
+You will also need to set the value of `hubName`, `projectName` and `componentName` variables. You can find them either in **Fusion Teams** web app, in **Fusion 360** or any other place that lets you navigate the contents of your **Autodesk** hubs and projects - including the **Manufacturing Data Model API** itself\
 ![Get version id](../readme/inputs.png)
 
 
@@ -35,7 +35,7 @@ The workflow can be achieved following these steps:
 2. If it's not available yet (status is "pending") then keep checking the latest status
 3. Once the status is "success" you can download the STEP file using the url provided
 
-## Fusion Data API Query
+## Manufacturing Data Model API Query
 
 In `app.js` file, the following GraphQL query traverses the hub, project and its rootfolder to find the design to generate the STEP file for
 ```
@@ -70,4 +70,4 @@ query GetGeometry($hubName: String!, $projectName: String!, $componentName: Stri
 
 -----------
 
-Please refer to this page for more details: [Fusion Data API Docs](https://aps.autodesk.com/en/docs/fusiondata/v1/developers_guide/overview/)
+Please refer to this page for more details: [Manufacturing Data Model API Docs](https://aps.autodesk.com/en/docs/mfgdataapi/v1/developers_guide/overview/)
