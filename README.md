@@ -5,11 +5,11 @@
 
 
 **APS API:** [![oAuth2](https://img.shields.io/badge/oAuth2-v2-green.svg)](https://aps.autodesk.com/en/docs/oauth/v1/developers_guide/overview/)
-[![Fusion Data API](https://img.shields.io/badge/Fusion%20Data-v1-orange)](https://aps.autodesk.com/en/docs/fusiondata/v1/developers_guide/overview/)
+[![Manufacturing Data Model API](https://img.shields.io/badge/Fusion%20Data-v1-orange)](https://aps.autodesk.com/en/docs/mfgdatamodel-publicbeta/v2/developers_guide/overview/)
 
 ---
 
-This repository contains several samples illustrating use of Fusion Data API in context of various workflows:
+This repository contains several samples illustrating use of Manufacturing Data Model API in context of various workflows:
 
 1. [Read the Complete Model Hierarchy of a Design](./1.Read%20the%20Complete%20Model%20Hierarchy%20of%20a%20Design) 
 
