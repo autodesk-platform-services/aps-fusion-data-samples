@@ -91,7 +91,7 @@ export default class App {
       // Keep getting the rest of the occurrences if needed
       while (cursor) {
         response = await this.sendQuery(
-          `query GetModelHierarchy($componentVersionId: String!, $cursor: String!) {
+          `query GetModelHierarchy($componentVersionId: ID!, $cursor: String) {
             mfg {
               componentVersion(componentVersionId: $componentVersionId) {
                 allModelOccurrences (pagination: {cursor: $cursor}) {
