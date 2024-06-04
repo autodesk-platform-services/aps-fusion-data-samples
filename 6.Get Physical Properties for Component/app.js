@@ -73,7 +73,7 @@ export default class App {
                                 status
                                 area {
                                   displayValue
-                                  propertyDefinition {
+                                  definition {
                                       units {
                                         name
                                       }
@@ -81,7 +81,7 @@ export default class App {
                                 }
                                 volume {
                                   displayValue
-                                  propertyDefinition {
+                                  definition {
                                       units {
                                         name
                                       }
@@ -90,7 +90,7 @@ export default class App {
                                 mass {
                                   displayValue
                                   value
-                                  propertyDefinition {
+                                  definition {
                                       units {
                                         name
                                       }
@@ -98,7 +98,7 @@ export default class App {
                                 }
                                 density {
                                   displayValue
-                                  propertyDefinition {
+                                  definition {
                                       units {
                                         name
                                       }
@@ -107,7 +107,7 @@ export default class App {
                                 boundingBox {
                                   length {
                                     displayValue
-                                    propertyDefinition {
+                                    definition {
                                       units {
                                         name
                                       }
@@ -115,7 +115,7 @@ export default class App {
                                   }
                                   height {
                                     displayValue
-                                    propertyDefinition {
+                                    definition {
                                       units {
                                         name
                                       }
@@ -123,7 +123,7 @@ export default class App {
                                   }
                                   width {
                                     displayValue
-                                    propertyDefinition {
+                                    definition {
                                       units {
                                         name
                                       }
