@@ -48,33 +48,31 @@ In `app.js` file, the following GraphQL query traverses the hub, project and its
 
 ```
 query GetModelHierarchy($hubName: String!, $projectName: String!, $componentName: String!) {
-  nav {
-    hubs(filter:{name:$hubName}) {
-      results {
-        name
-        projects(filter:{name:$projectName}) {
-          results {
-            name
-            items(filter:{name:$componentName}) {
-              results {
-                ... on MFGDesignItem {
-                  name
-                  tipRootComponentVersion {
-                    id
-                    name 
-                    allModelOccurrences {
-                      results {
-                        parentComponentVersion {
-                          id 
-                        }
-                        componentVersion {
-                          id
-                          name
-                        }
+  hubs(filter:{name:$hubName}) {
+    results {
+      name
+      projects(filter:{name:$projectName}) {
+        results {
+          name
+          items(filter:{name:$componentName}) {
+            results {
+              ... on DesignItem {
+                name
+                tipRootComponentVersion {
+                  id
+                  name 
+                  allOccurrences {
+                    results {
+                      parentComponentVersion {
+                        id 
                       }
-                      pagination {
-                        cursor
+                      componentVersion {
+                        id
+                        name
                       }
+                    }
+                    pagination {
+                      cursor
                     }
                   }
                 }

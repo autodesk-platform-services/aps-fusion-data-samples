@@ -39,7 +39,7 @@ export default class App {
   }
 
   getComponentVersionThumbnail(response, hubName, projectName, componentName) {
-    let hubs = response.data.data.nav.hubs.results;
+    let hubs = response.data.data.hubs.results;
     if (hubs.length < 1)
       throw { message: `Hub "${hubName}" does not exist` }
       
@@ -60,20 +60,18 @@ export default class App {
       while (true) {
         let response = await this.sendQuery(
           `query GetThumbnail($hubName: String!, $projectName: String!, $componentName: String!) {
-            nav {
-              hubs(filter:{name:$hubName}) {
-                results {
-                  projects(filter:{name:$projectName}) {
-                    results {
-                      items(filter:{name:$componentName}) {
-                        results {
-                          ... on MFGDesignItem {
-                            tipRootComponentVersion {
-                              thumbnail {
-                                status
-                                url
-                              }          
-                            }
+            hubs(filter:{name:$hubName}) {
+              results {
+                projects(filter:{name:$projectName}) {
+                  results {
+                    items(filter:{name:$componentName}) {
+                      results {
+                        ... on DesignItem {
+                          tipRootComponentVersion {
+                            thumbnail {
+                              status
+                              signedUrl
+                            }          
                           }
                         }
                       }
@@ -98,7 +96,7 @@ export default class App {
           // If the thumbnail generation finished then we can download it
           // from the url
           let thumbnailPath = path.resolve('thumbnail.png');
-          await this.downloadImage(thumbnail.url, thumbnailPath);
+          await this.downloadImage(thumbnail.signedUrl, thumbnailPath);
           return "file://" + encodeURI(thumbnailPath);
         } else {
           console.log("Extracting thumbnail … (it may take a few seconds)")

@@ -40,33 +40,31 @@ export default class App {
       // Get first batch of occurrences
       let response = await this.sendQuery(
         `query GetComponentVersion($hubName: String!, $projectName: String!, $componentName: String!) {
-          nav {
-            hubs(filter:{name:$hubName}) {
-              results {
-                name
-                projects(filter:{name:$projectName}) {
-                  results {
-                    name
-                    items(filter:{name:$componentName}) {
-                      results {
-                        ... on MFGDesignItem {
-                          name
-                          tipRootComponentVersion {
-                            id
-                            name 
-                            allModelOccurrences {
-                              results {
-                                parentComponentVersion {
-                                  id 
-                                }
-                                componentVersion {
-                                  id
-                                  name
-                                }
+          hubs(filter:{name:$hubName}) {
+            results {
+              name
+              projects(filter:{name:$projectName}) {
+                results {
+                  name
+                  items(filter:{name:$componentName}) {
+                    results {
+                      ... on DesignItem {
+                        name
+                        tipRootComponentVersion {
+                          id
+                          name 
+                          allOccurrences {
+                            results {
+                              parentComponentVersion {
+                                id 
                               }
-                              pagination {
-                                cursor
+                              componentVersion {
+                                id
+                                name
                               }
+                            }
+                            pagination {
+                              cursor
                             }
                           }
                         }
@@ -85,8 +83,8 @@ export default class App {
         }
       )
 
-      let rootComponentVersion = response.data.data.nav.hubs.results[0].projects.results[0].items.results[0].tipRootComponentVersion;
-      let cursor = rootComponentVersion.allModelOccurrences.pagination.cursor;
+      let rootComponentVersion = response.data.data.hubs.results[0].projects.results[0].items.results[0].tipRootComponentVersion;
+      let cursor = rootComponentVersion.allOccurrences.pagination.cursor;
 
       // Keep getting the rest of the occurrences if needed
       while (cursor) {
@@ -94,7 +92,7 @@ export default class App {
           `query GetModelHierarchy($componentVersionId: ID!, $cursor: String) {
             mfg {
               componentVersion(componentVersionId: $componentVersionId) {
-                allModelOccurrences (pagination: {cursor: $cursor}) {
+                allOccurrences (pagination: {cursor: $cursor}) {
                   results {
                     parentComponentVersion {
                       id 
@@ -117,10 +115,10 @@ export default class App {
           }
         )
 
-        rootComponentVersion.allModelOccurrences.results = 
-          rootComponentVersion.allModelOccurrences.results.concat(
-            response.data.data.mfg.componentVersion.allModelOccurrences.results);
-        cursor = response.data.data.mfg.componentVersion.allModelOccurrences.pagination.cursor;
+        rootComponentVersion.allOccurrences.results = 
+          rootComponentVersion.allOccurrences.results.concat(
+            response.data.data.mfg.componentVersion.allOccurrences.results);
+        cursor = response.data.data.mfg.componentVersion.allOccurrences.pagination.cursor;
       }
 
       return rootComponentVersion;

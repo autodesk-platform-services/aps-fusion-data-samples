@@ -39,7 +39,7 @@ export default class App {
   }
 
   getComponentVersionGeometry(response, hubName, projectName, componentName) {
-    let hubs = response.data.data.nav.hubs.results;
+    let hubs = response.data.data.hubs.results;
     if (hubs.length < 1)
       throw { message: `Hub "${hubName}" does not exist` }
       
@@ -60,23 +60,20 @@ export default class App {
       while (true) {
         let response = await this.sendQuery(
           `query GetGeometry($hubName: String!, $projectName: String!, $componentName: String!) {
-            nav {
-              hubs(filter:{name:$hubName}) {
-                results {
-                  projects(filter:{name:$projectName}) {
-                    results {
-                      items(filter:{name:$componentName}) {
-                        results {
-                          ... on MFGDesignItem {
-                            tipRootComponentVersion {
-                              derivatives (derivativeInput: {outputFormat: STEP, generate: true}) {
-                                expires
-                                signedUrl
-                                status
-                                progress
-                                outputFormat
-                              }       
-                            }
+            hubs(filter:{name:$hubName}) {
+              results {
+                projects(filter:{name:$projectName}) {
+                  results {
+                    items(filter:{name:$componentName}) {
+                      results {
+                        ... on DesignItem {
+                          tipRootComponentVersion {
+                            derivatives (derivativeInput: {outputFormat: STEP, generate: true}) {
+                              expires
+                              signedUrl
+                              status
+                              outputFormat
+                            }       
                           }
                         }
                       }

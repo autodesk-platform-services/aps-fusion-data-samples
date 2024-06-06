@@ -39,7 +39,7 @@ export default class App {
   }
 
   getComponentVersionPhysicalProperties(response, hubName, projectName, componentName) {
-    let hubs = response.data.data.nav.hubs.results;
+    let hubs = response.data.data.hubs.results;
     if (hubs.length < 1)
       throw { message: `Hub "${hubName}" does not exist` }
       
@@ -60,78 +60,76 @@ export default class App {
       while (true) {
         let response = await this.sendQuery(
           `query GetPhysicalProperties($hubName: String!, $projectName: String!, $componentName: String!) {
-            nav {
-              hubs(filter:{name:$hubName}) {
-                results {
-                  projects(filter:{name:$projectName}) {
-                    results {
-                      items(filter:{name:$componentName}) {
-                        results {
-                          ... on MFGDesignItem {
-                            tipRootComponentVersion {
-                              physicalProperties {
-                                status
-                                area {
-                                  displayValue
-                                  definition {
-                                      units {
-                                        name
-                                      }
-                                    }
-                                }
-                                volume {
-                                  displayValue
-                                  definition {
-                                      units {
-                                        name
-                                      }
-                                    }
-                                }
-                                mass {
-                                  displayValue
-                                  value
-                                  definition {
-                                      units {
-                                        name
-                                      }
-                                    }
-                                }
-                                density {
-                                  displayValue
-                                  definition {
-                                      units {
-                                        name
-                                      }
-                                    }
-                                }
-                                boundingBox {
-                                  length {
-                                    displayValue
-                                    definition {
-                                      units {
-                                        name
-                                      }
+            hubs(filter:{name:$hubName}) {
+              results {
+                projects(filter:{name:$projectName}) {
+                  results {
+                    items(filter:{name:$componentName}) {
+                      results {
+                        ... on DesignItem {
+                          tipRootComponentVersion {
+                            physicalProperties {
+                              status
+                              area {
+                                displayValue
+                                definition {
+                                    units {
+                                      name
                                     }
                                   }
-                                  height {
-                                    displayValue
-                                    definition {
-                                      units {
-                                        name
-                                      }
+                              }
+                              volume {
+                                displayValue
+                                definition {
+                                    units {
+                                      name
                                     }
                                   }
-                                  width {
-                                    displayValue
-                                    definition {
-                                      units {
-                                        name
-                                      }
+                              }
+                              mass {
+                                displayValue
+                                value
+                                definition {
+                                    units {
+                                      name
+                                    }
+                                  }
+                              }
+                              density {
+                                displayValue
+                                definition {
+                                    units {
+                                      name
+                                    }
+                                  }
+                              }
+                              boundingBox {
+                                length {
+                                  displayValue
+                                  definition {
+                                    units {
+                                      name
                                     }
                                   }
                                 }
-                              }       
-                            }
+                                height {
+                                  displayValue
+                                  definition {
+                                    units {
+                                      name
+                                    }
+                                  }
+                                }
+                                width {
+                                  displayValue
+                                  definition {
+                                    units {
+                                      name
+                                    }
+                                  }
+                                }
+                              }
+                            }       
                           }
                         }
                       }
