@@ -90,21 +90,19 @@ export default class App {
       while (cursor) {
         response = await this.sendQuery(
           `query GetModelHierarchy($componentVersionId: ID!, $cursor: String) {
-            mfg {
-              componentVersion(componentVersionId: $componentVersionId) {
-                allOccurrences (pagination: {cursor: $cursor}) {
-                  results {
-                    parentComponentVersion {
-                      id 
-                    }
-                    componentVersion {
-                      id
-                      name
-                    }
+            componentVersion(componentVersionId: $componentVersionId) {
+              allOccurrences (pagination: {cursor: $cursor}) {
+                results {
+                  parentComponentVersion {
+                    id 
                   }
-                  pagination {
-                    cursor
+                  componentVersion {
+                    id
+                    name
                   }
+                }
+                pagination {
+                  cursor
                 }
               }
             }
@@ -117,8 +115,8 @@ export default class App {
 
         rootComponentVersion.allOccurrences.results = 
           rootComponentVersion.allOccurrences.results.concat(
-            response.data.data.mfg.componentVersion.allOccurrences.results);
-        cursor = response.data.data.mfg.componentVersion.allOccurrences.pagination.cursor;
+            response.data.data.componentVersion.allOccurrences.results);
+        cursor = response.data.data.componentVersion.allOccurrences.pagination.cursor;
       }
 
       return rootComponentVersion;
