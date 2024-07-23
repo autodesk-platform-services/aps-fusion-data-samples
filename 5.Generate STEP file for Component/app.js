@@ -38,45 +38,55 @@ export default class App {
     return response;
   }
 
-  getComponentVersionGeometry(response, hubName, projectName, componentName) {
-    let hubs = response.data.data.hubs.results;
-    if (hubs.length < 1)
-      throw { message: `Hub "${hubName}" does not exist` }
-      
-    let projects = hubs[0].projects.results;
-    if (projects.length < 1)
-      throw { message: `Project "${projectName}" does not exist` }
+  async getProjectId(hubName, projectName) {
+    try {
+      // Get first batch of occurrences
+      let response = await this.sendQuery(
+        `query GetProjectId($hubName: String!, $projectName: String!) {
+          hubs(filter:{name:$hubName}) {
+            results {
+              name
+              projects(filter:{name:$projectName}) {
+                results {
+                  name
+                  id
+                }
+              }
+            }
+          }
+        }`,
+        {
+          hubName,
+          projectName
+        }
+      );
 
-    let files = projects[0].items.results;
-    if (files.length < 1)
-      throw { message: `Component "${componentName}" does not exist` }
-
-    return files[0].tipRootComponentVersion.derivatives[0];
+      let projectId = response.data.data.hubs.results[0].projects.results[0].id;
+      return projectId;
+    } catch (err) {
+      console.log("There was an issue: " + err.message);
+    }
   }
 
 // <downloadGeometry>
   async downloadGeometry(hubName, projectName, componentName) {
     try {
+      let projectId = await this.getProjectId(hubName, projectName);
+
       while (true) {
         let response = await this.sendQuery(
-          `query GetGeometry($hubName: String!, $projectName: String!, $componentName: String!) {
-            hubs(filter:{name:$hubName}) {
-              results {
-                projects(filter:{name:$projectName}) {
-                  results {
-                    items(filter:{name:$componentName}) {
-                      results {
-                        ... on DesignItem {
-                          tipRootComponentVersion {
-                            derivatives (derivativeInput: {outputFormat: STEP, generate: true}) {
-                              expires
-                              signedUrl
-                              status
-                              outputFormat
-                            }       
-                          }
-                        }
-                      }
+          `query GetGeometry($projectId: ID!, $componentName: String!) {
+            project(projectId: $projectId) {
+              items(filter:{name:$componentName}) {
+                results {
+                  ... on DesignItem {
+                    tipRootComponentVersion {
+                      derivatives (derivativeInput: {outputFormat: STEP, generate: true}) {
+                        expires
+                        signedUrl
+                        status
+                        outputFormat
+                      }       
                     }
                   }
                 }
@@ -84,15 +94,12 @@ export default class App {
             }
           }`,
           {
-            hubName,
-            projectName,
+            projectId,
             componentName
           }
         )
 
-        let geometry = this.getComponentVersionGeometry(
-          response, hubName, projectName, componentName
-        );
+        let geometry = response.data.data.project.items.results[0].tipRootComponentVersion.derivatives[0];
 
         if (geometry.status === "SUCCESS") {
           // If the geometry generation finished then we can download it

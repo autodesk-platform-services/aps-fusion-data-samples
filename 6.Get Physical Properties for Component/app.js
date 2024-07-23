@@ -38,117 +38,147 @@ export default class App {
     return response;
   }
 
-  getComponentVersionPhysicalProperties(response, hubName, projectName, componentName) {
-    let hubs = response.data.data.hubs.results;
-    if (hubs.length < 1)
-      throw { message: `Hub "${hubName}" does not exist` }
-      
-    let projects = hubs[0].projects.results;
-    if (projects.length < 1)
-      throw { message: `Project "${projectName}" does not exist` }
+  async getProjectId(hubName, projectName) {
+    try {
+      // Get first batch of occurrences
+      let response = await this.sendQuery(
+        `query GetProjectId($hubName: String!, $projectName: String!) {
+          hubs(filter: {name: $hubName}) {
+            results {
+              name
+              projects(filter:{name:$projectName}) {
+                results {
+                  name
+                  id
+                }
+              }
+            }
+          }
+        }`,
+        {
+          hubName,
+          projectName
+        }
+      );
 
-    let files = projects[0].items.results;
-    if (files.length < 1)
-      throw { message: `Component "${componentName}" does not exist` }
+      let projectId = response.data.data.hubs.results[0].projects.results[0].id;
+      return projectId;
+    } catch (err) {
+      console.log("There was an issue: " + err.message);
+    }
+  }
 
-    return files[0].tipRootComponentVersion.physicalProperties;
+  async getComponentVersionId(projectId, componentName) {
+    try {
+      // Get first batch of occurrences
+      let response = await this.sendQuery(
+        `query GetComponentVersionId($projectId: ID!, $componentName: String!) {
+          project(projectId: $projectId) {
+            items(filter: {name: $componentName}) {
+              results {
+                ... on DesignItem {
+                  tipRootComponentVersion {
+                    id
+                  } 
+                }
+              } 
+            }
+          }
+        }`,
+        {
+          projectId,
+          componentName
+        }
+      );
+
+      let componentVersionId = response.data.data.project.items.results[0].tipRootComponentVersion.id;
+      return componentVersionId;
+    } catch (err) {
+      console.log("There was an issue: " + err.message);
+    }
   }
 
 // <getPhysicalProperties>
   async getPhysicalProperties(hubName, projectName, componentName) {
     try {
+      let projectId = await this.getProjectId(hubName, projectName);
+
+      let componentVersionId = await this.getComponentVersionId(projectId, componentName);
+
       while (true) {
         let response = await this.sendQuery(
-          `query GetPhysicalProperties($hubName: String!, $projectName: String!, $componentName: String!) {
-            hubs(filter:{name:$hubName}) {
-              results {
-                projects(filter:{name:$projectName}) {
-                  results {
-                    items(filter:{name:$componentName}) {
-                      results {
-                        ... on DesignItem {
-                          tipRootComponentVersion {
-                            physicalProperties {
-                              status
-                              area {
-                                displayValue
-                                definition {
-                                    units {
-                                      name
-                                    }
-                                  }
-                              }
-                              volume {
-                                displayValue
-                                definition {
-                                    units {
-                                      name
-                                    }
-                                  }
-                              }
-                              mass {
-                                displayValue
-                                value
-                                definition {
-                                    units {
-                                      name
-                                    }
-                                  }
-                              }
-                              density {
-                                displayValue
-                                definition {
-                                    units {
-                                      name
-                                    }
-                                  }
-                              }
-                              boundingBox {
-                                length {
-                                  displayValue
-                                  definition {
-                                    units {
-                                      name
-                                    }
-                                  }
-                                }
-                                height {
-                                  displayValue
-                                  definition {
-                                    units {
-                                      name
-                                    }
-                                  }
-                                }
-                                width {
-                                  displayValue
-                                  definition {
-                                    units {
-                                      name
-                                    }
-                                  }
-                                }
-                              }
-                            }       
-                          }
-                        }
+          `query GetPhysicalProperties($componentVersionId: ID!) {
+            componentVersion(componentVersionId: $componentVersionId) {
+              physicalProperties {
+                status
+                area {
+                  displayValue
+                  definition {
+                      units {
+                        name
+                      }
+                    }
+                }
+                volume {
+                  displayValue
+                  definition {
+                      units {
+                        name
+                      }
+                    }
+                }
+                mass {
+                  displayValue
+                  value
+                  definition {
+                      units {
+                        name
+                      }
+                    }
+                }
+                density {
+                  displayValue
+                  definition {
+                      units {
+                        name
+                      }
+                    }
+                }
+                boundingBox {
+                  length {
+                    displayValue
+                    definition {
+                      units {
+                        name
+                      }
+                    }
+                  }
+                  height {
+                    displayValue
+                    definition {
+                      units {
+                        name
+                      }
+                    }
+                  }
+                  width {
+                    displayValue
+                    definition {
+                      units {
+                        name
                       }
                     }
                   }
                 }
-              }
+              }       
             }
           }`,
           {
-            hubName,
-            projectName,
-            componentName
+            componentVersionId
           }
         )
 
-        let geometry = this.getComponentVersionPhysicalProperties(
-          response, hubName, projectName, componentName
-        );
+        let geometry = response.data.data.componentVersion.physicalProperties;
 
         if (geometry.status === "COMPLETED") {
           return geometry;

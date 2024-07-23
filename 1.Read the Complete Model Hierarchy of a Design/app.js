@@ -1,30 +1,30 @@
-// Axios is a promise-based HTTP client for the browser and node.js. 
+// Axios is a promise-based HTTP client for the browser and node.js.
 import axios from "axios";
 
-// Application constructor 
+// Application constructor
 export default class App {
   constructor(accessToken) {
-    this.graphAPI = 'https://developer.api.autodesk.com/beta/graphql';
+    this.graphAPI = "https://developer.api.autodesk.com/beta/graphql";
     this.accessToken = accessToken;
   }
 
   getRequestHeaders() {
     return {
       "Content-type": "application/json; charset=utf-8",
-      "Authorization": "Bearer " + this.accessToken,
+      Authorization: "Bearer " + this.accessToken,
     };
   }
 
   async sendQuery(query, variables) {
     let response = await axios({
-      method: 'POST',
+      method: "POST",
       url: `${this.graphAPI}`,
       headers: this.getRequestHeaders(),
-      data: { 
+      data: {
         query,
-        variables
-      }
-    })
+        variables,
+      },
+    });
 
     if (response.data.errors) {
       let formatted = JSON.stringify(response.data.errors, null, 2);
@@ -34,40 +34,65 @@ export default class App {
     return response;
   }
 
-  // <getModelHierarchy>
-  async getModelHierarchy(hubName, projectName, componentName) {
+  async getProjectId(hubName, projectName) {
     try {
       // Get first batch of occurrences
       let response = await this.sendQuery(
-        `query GetComponentVersion($hubName: String!, $projectName: String!, $componentName: String!) {
+        `query GetProjectId($hubName: String!, $projectName: String!) {
           hubs(filter:{name:$hubName}) {
             results {
               name
               projects(filter:{name:$projectName}) {
                 results {
                   name
-                  items(filter:{name:$componentName}) {
-                    results {
-                      ... on DesignItem {
-                        name
-                        tipRootComponentVersion {
-                          id
-                          name 
-                          allOccurrences {
-                            results {
-                              parentComponentVersion {
-                                id 
-                              }
-                              componentVersion {
-                                id
-                                name
-                              }
-                            }
-                            pagination {
-                              cursor
-                            }
-                          }
+                  id
+                }
+              }
+            }
+          }
+        }`,
+        {
+          hubName,
+          projectName
+        }
+      );
+
+      let projectId = response.data.data.hubs.results[0].projects.results[0].id;
+      return projectId;
+    } catch (err) {
+      console.log("There was an issue: " + err.message);
+    }
+  }
+
+// <getModelHierarchy>
+  async getModelHierarchy(hubName, projectName, componentName) {
+    try {
+      let projectId = await this.getProjectId(hubName, projectName);
+
+      // Get first batch of occurrences
+      let response = await this.sendQuery(
+        `query GetModelHierarchy($projectId: ID!, $componentName: String!) {
+          project(projectId: $projectId) {
+            name
+            items(filter:{name:$componentName}) {
+              results {
+                ... on DesignItem {
+                  name
+                  tipRootComponentVersion {
+                    id
+                    name 
+                    allOccurrences {
+                      results {
+                        parentComponentVersion {
+                          id 
                         }
+                        componentVersion {
+                          id
+                          name
+                        }
+                      }
+                      pagination {
+                        cursor
                       }
                     }
                   }
@@ -77,13 +102,14 @@ export default class App {
           }
         }`,
         {
-          hubName,
-          projectName,
+          projectId,
           componentName
         }
-      )
+      );
 
-      let rootComponentVersion = response.data.data.hubs.results[0].projects.results[0].items.results[0].tipRootComponentVersion;
+      let rootComponentVersion =
+        response.data.data.project.items.results[0]
+          .tipRootComponentVersion;
       let cursor = rootComponentVersion.allOccurrences.pagination.cursor;
 
       // Keep getting the rest of the occurrences if needed
@@ -111,21 +137,20 @@ export default class App {
             componentVersionId: rootComponentVersion.id,
             cursor
           }
-        )
+        );
 
-        rootComponentVersion.allOccurrences.results = 
+        rootComponentVersion.allOccurrences.results =
           rootComponentVersion.allOccurrences.results.concat(
-            response.data.data.componentVersion.allOccurrences.results);
-        cursor = response.data.data.componentVersion.allOccurrences.pagination.cursor;
+            response.data.data.componentVersion.allOccurrences.results
+          );
+        cursor =
+          response.data.data.componentVersion.allOccurrences.pagination.cursor;
       }
 
       return rootComponentVersion;
     } catch (err) {
-      console.log("There was an issue: " + err.message)
+      console.log("There was an issue: " + err.message);
     }
   }
-// </getModelHierarchy>  
+// </getModelHierarchy>
 }
-
-
-
