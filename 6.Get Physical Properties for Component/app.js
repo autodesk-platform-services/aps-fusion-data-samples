@@ -20,22 +20,26 @@ export default class App {
   }
 
   async sendQuery(query, variables) {
-    let response = await axios({
-      method: 'POST',
-      url: `${this.graphAPI}`,
-      headers: this.getRequestHeaders(),
-      data: { 
-        query,
-        variables
+    try {
+      let response = await axios({
+        method: "POST",
+        url: `${this.graphAPI}`,
+        headers: this.getRequestHeaders(),
+        data: {
+          query,
+          variables,
+        },
+      });
+
+      return response;
+    } catch (err) {
+      if (err.response.data.errors) {
+        let formatted = JSON.stringify(err.response.data.errors, null, 2);
+        console.log(`API error:\n${formatted}`);
       }
-    })
 
-    if (response.data.errors) {
-      let formatted = JSON.stringify(response.data.errors, null, 2);
-      console.log(`API error:\n${formatted}`);
+      throw err;
     }
-
-    return response;
   }
 
   async getProjectId(hubName, projectName) {

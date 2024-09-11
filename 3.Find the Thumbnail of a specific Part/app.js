@@ -20,22 +20,26 @@ export default class App {
   }
 
   async sendQuery(query, variables) {
-    let response = await axios({
-      method: 'POST',
-      url: `${this.graphAPI}`,
-      headers: this.getRequestHeaders(),
-      data: { 
-        query,
-        variables
+    try {
+      let response = await axios({
+        method: "POST",
+        url: `${this.graphAPI}`,
+        headers: this.getRequestHeaders(),
+        data: {
+          query,
+          variables,
+        },
+      });
+
+      return response;
+    } catch (err) {
+      if (err.response.data.errors) {
+        let formatted = JSON.stringify(err.response.data.errors, null, 2);
+        console.log(`API error:\n${formatted}`);
       }
-    })
 
-    if (response.data.errors) {
-      let formatted = JSON.stringify(response.data.errors, null, 2);
-      console.log(`API error:\n${formatted}`);
+      throw err;
     }
-
-    return response;
   }
 
   async getProjectId(hubName, projectName) {
@@ -68,36 +72,61 @@ export default class App {
     }
   }
 
+  async getComponentVersionId(projectId, componentName) {
+    try {
+      // Get first batch of occurrences
+      let response = await this.sendQuery(
+        `query GetComponentVersionId($projectId: ID!, $componentName: String!) {
+          project(projectId: $projectId) {
+            name
+            items(filter:{name:$componentName}) {
+              results {
+                ... on DesignItem {
+                  name
+                  tipRootComponentVersion {
+                    id
+                  }
+                }
+              }
+            }
+          }
+        }`,
+        {
+          projectId,
+          componentName
+        }
+      );
+
+      let componentVersionId = response.data.data.project.items.results[0].tipRootComponentVersion.id;
+      return componentVersionId;
+    } catch (err) {
+      console.log("There was an issue: " + err.message);
+    }
+  }
+
 // <downloadThumbnail>
   async downloadThumbnail(hubName, projectName, componentName) {
     try {
       let projectId = await this.getProjectId(hubName, projectName);
 
+	    let componentVersionId = await this.getComponentVersionId(projectId, componentName);
+
       while (true) {
         let response = await this.sendQuery(
-          `query GetThumbnail($projectId: ID!, $componentName: String!) {
-            project(projectId: $projectId) {
-              items(filter:{name:$componentName}) {
-                results {
-                  ... on DesignItem {
-                    tipRootComponentVersion {
-                      thumbnail {
-                        status
-                        signedUrl
-                      }          
-                    }
-                  }
-                }
-              }
+          `query GetThumbnail($componentVersionId: ID!) {
+            componentVersion(componentVersionId: $componentVersionId) {
+              thumbnail {
+                status
+                signedUrl
+              }          
             }
           }`,
           {
-            projectId,
-            componentName
+            componentVersionId
           }
         )
 
-        let thumbnail = response.data.data.project.items.results[0].tipRootComponentVersion.thumbnail;
+        let thumbnail = response.data.data.componentVersion.thumbnail;
 
         if (thumbnail.status === "SUCCESS") {
           // If the thumbnail generation finished then we can download it

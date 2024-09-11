@@ -16,22 +16,26 @@ export default class App {
   }
 
   async sendQuery(query, variables) {
-    let response = await axios({
-      method: "POST",
-      url: `${this.graphAPI}`,
-      headers: this.getRequestHeaders(),
-      data: {
-        query,
-        variables,
-      },
-    });
+    try {
+      let response = await axios({
+        method: "POST",
+        url: `${this.graphAPI}`,
+        headers: this.getRequestHeaders(),
+        data: {
+          query,
+          variables,
+        },
+      });
 
-    if (response.data.errors) {
-      let formatted = JSON.stringify(response.data.errors, null, 2);
-      console.log(`API error:\n${formatted}`);
+      return response;
+    } catch (err) {
+      if (err.response.data.errors) {
+        let formatted = JSON.stringify(err.response.data.errors, null, 2);
+        console.log(`API error:\n${formatted}`);
+      }
+
+      throw err;
     }
-
-    return response;
   }
 
   async getProjectId(hubName, projectName) {
@@ -64,14 +68,11 @@ export default class App {
     }
   }
 
-// <getModelHierarchy>
-  async getModelHierarchy(hubName, projectName, componentName) {
+  async getComponentVersionId(projectId, componentName) {
     try {
-      let projectId = await this.getProjectId(hubName, projectName);
-
       // Get first batch of occurrences
       let response = await this.sendQuery(
-        `query GetModelHierarchy($projectId: ID!, $componentName: String!) {
+        `query GetComponentVersionId($projectId: ID!, $componentName: String!) {
           project(projectId: $projectId) {
             name
             items(filter:{name:$componentName}) {
@@ -80,21 +81,6 @@ export default class App {
                   name
                   tipRootComponentVersion {
                     id
-                    name 
-                    allOccurrences {
-                      results {
-                        parentComponentVersion {
-                          id 
-                        }
-                        componentVersion {
-                          id
-                          name
-                        }
-                      }
-                      pagination {
-                        cursor
-                      }
-                    }
                   }
                 }
               }
@@ -107,9 +93,49 @@ export default class App {
         }
       );
 
+      let componentVersionId = response.data.data.project.items.results[0].tipRootComponentVersion.id;
+      return componentVersionId;
+    } catch (err) {
+      console.log("There was an issue: " + err.message);
+    }
+  }
+
+// <getModelHierarchy>
+  async getModelHierarchy(hubName, projectName, componentName) {
+    try {
+      let projectId = await this.getProjectId(hubName, projectName);
+
+      let componentVersionId = await this.getComponentVersionId(projectId, componentName);
+
+      // Get first batch of occurrences
+      let response = await this.sendQuery(
+        `query GetModelHierarchy($componentVersionId: ID!) {
+          componentVersion(componentVersionId: $componentVersionId) {
+            id
+            name 
+            allOccurrences {
+              results {
+                parentComponentVersion {
+                  id 
+                }
+                componentVersion {
+                  id
+                  name
+                }
+              }
+              pagination {
+                cursor
+              }
+            }
+          }
+        }`,
+        {
+          componentVersionId
+        }
+      );
+
       let rootComponentVersion =
-        response.data.data.project.items.results[0]
-          .tipRootComponentVersion;
+        response.data.data.componentVersion;
       let cursor = rootComponentVersion.allOccurrences.pagination.cursor;
 
       // Keep getting the rest of the occurrences if needed
